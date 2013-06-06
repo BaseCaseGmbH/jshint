@@ -99,6 +99,7 @@ var JSHINT = (function () {
 			globalstrict: true, // if global "use strict"; should be allowed (also enables 'strict')
 			immed       : true, // if immediate invocations must be wrapped in parens
 			iterator    : true, // if the `__iterator__` property should be allowed
+			javaswitch  : true, // if indentation inside switch block should follow java standard
 			jquery      : true, // if jQuery globals should be predefined
 			lastsemic   : true, // if semicolons may be ommitted for the trailing
 			                    // statements inside of a one-line blocks.
@@ -3494,7 +3495,7 @@ var JSHINT = (function () {
 		t = state.tokens.next;
 		advance("{");
 		nonadjacent(state.tokens.curr, state.tokens.next);
-		indent += state.option.indent;
+		indent += state.option.indent * (state.option.javaswitch ? 1 : 2);
 		this.cases = [];
 
 		for (;;) {
@@ -3548,7 +3549,7 @@ var JSHINT = (function () {
 				advance(":");
 				break;
 			case "}":
-				indent -= state.option.indent;
+				indent -= state.option.indent * (state.option.javaswitch ? 1 : 2);
 				indentation();
 				advance("}", t);
 				funct["(breakage)"] -= 1;
